@@ -1,13 +1,13 @@
-package com.example.javaspringboot;
+package com.api.domain;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JavaSpringBootApplication {
+public class Main {
 
   public static void main(String[] args) {
-    SpringApplication.run(JavaSpringBootApplication.class, args);
+    SpringApplication.run(Main.class, args);
   }
 
 }
