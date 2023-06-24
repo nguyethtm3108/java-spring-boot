@@ -2,7 +2,7 @@ package com.api.domain.service;
 
 import java.util.List;
 
-public interface SearchService<S, T> {
+public interface SearchService<T> {
 
-  List<T> execute(S request);
+  List<T> execute(String name, Integer page, Integer size);
 }

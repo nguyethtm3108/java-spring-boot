@@ -13,26 +13,51 @@
                      , first_name
                      , last_name
                      , account
+                     , gender
                      , phone
-                     , gender)
-    VALUES ( #{id}
-           , #{firstName}
+                     , address)
+    VALUES ( #{id},
+             #{firstName}
            , #{lastName}
            , #{account}
-           , #{username}
-           , #{gender})
+           , #{gender}
+           , #{phone}
+           , #{address})
     ]]>
   </insert>
 
   <select id="findAll" parameterType="java.lang.Long" resultType="com.api.domain.entity.User">
     <![CDATA[
-    SELECT id
-         , first_name
-         , last_name
-         , account
-         , phone
-         , gender
+    SELECT *
     FROM USER
     ]]>
   </select>
+
+  <update id="softDelete">
+    UPDATE user SET
+    deleted_at = #{user.deleteAt},
+    where id in
+    <foreach item="item" index="index" collection="ids"
+      open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <delete id="delete">
+    <![CDATA[
+    DELETE
+    from user
+    where id = #{id}
+    ]]>
+  </delete>
+
+
+  <select id="search" parameterType="java.lang.Long" resultType="com.api.domain.entity.User">
+        <![CDATA[
+    SELECT *
+    FROM user
+    ORDER BY id
+      desc
+    ]]>
+    </select>
 </mapper>
