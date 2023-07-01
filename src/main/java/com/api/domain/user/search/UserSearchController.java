@@ -20,8 +20,9 @@ public class UserSearchController {
   @GetMapping
   public ResponseEntity<List<UserSearchResponse>> search(
       @RequestParam @Nullable String account,
-      @RequestParam @Nullable  Integer page,
-      @RequestParam @Nullable Integer size) {
-    return ResponseEntity.ok(userSearchService.execute(account, page, size));
+      @RequestParam(defaultValue = "1") Integer page,
+      @RequestParam(defaultValue = "20")  Integer size) {
+    UserSearchRequest request = new UserSearchRequest(account, page, size);
+    return ResponseEntity.ok(userSearchService.execute(request));
   }
 }

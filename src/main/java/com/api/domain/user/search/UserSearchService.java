@@ -9,19 +9,15 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @org.springframework.stereotype.Service
-public class UserSearchService implements SearchService<UserSearchResponse> {
+public class UserSearchService implements SearchService<UserSearchRequest, UserSearchResponse> {
 
   private final UserRepository userRepository;
 
   @Override
-  public List<UserSearchResponse> execute(String account, Integer page, Integer size) {
+  public List<UserSearchResponse> execute(UserSearchRequest request) {
     List<User> listUser;
-    if (page == null && size == null) {
-      listUser = userRepository.findAll();
-    } else {
-      RowBounds rowBounds = new RowBounds(page, size);
-      listUser = userRepository.search(rowBounds);
-    }
+    RowBounds rowBounds = new RowBounds(request.getPage() < 1 ? 1 : request.getPage() - 1 , request.getSize());
+    listUser = userRepository.search(request, rowBounds);
     return listUser.stream().map(UserSearchResponse::of).toList();
   }
 }

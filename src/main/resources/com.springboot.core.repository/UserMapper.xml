@@ -7,7 +7,10 @@
     flushCache="true"
     id="create"
     parameterType="com.api.domain.entity.User"
-    timeout="20">
+    timeout="20"
+    keyProperty="id"
+    useGeneratedKeys="true"
+  >
     <![CDATA[
     INSERT INTO USER ( id
                      , first_name
@@ -15,14 +18,18 @@
                      , account
                      , gender
                      , phone
-                     , address)
+                     , address
+                     , created_at
+                     )
     VALUES ( #{id},
              #{firstName}
            , #{lastName}
            , #{account}
            , #{gender}
            , #{phone}
-           , #{address})
+           , #{address}
+           , #{deletedAt}
+           )
     ]]>
   </insert>
 
@@ -33,17 +40,18 @@
     ]]>
   </select>
 
-  <update id="softDelete">
+  <update id="softDelete" flushCache="true" parameterType="com.api.domain.entity.User" keyProperty="id" timeout="20">
     UPDATE user SET
-    deleted_at = #{user.deleteAt},
+    deleted_at = #{user.deletedAt}
     where id in
-    <foreach item="item" index="index" collection="ids"
-      open="(" separator="," close=")">
-      #{item}
-    </foreach>
+      <foreach item="item" index="index" collection="ids"
+        open="(" separator="," close=")">
+        #{item}
+      </foreach>
   </update>
 
   <delete id="delete">
+<!--    CDATA bên trong sẽ là raw data. => k coi là xml tag => k sử dụng được if. để CDTA vì để tắt format của ide-->
     <![CDATA[
     DELETE
     from user
@@ -53,11 +61,12 @@
 
 
   <select id="search" parameterType="java.lang.Long" resultType="com.api.domain.entity.User">
-        <![CDATA[
     SELECT *
     FROM user
+    <where>
+      <if test="account != null">AND lower(account) LIKE lower(concat('%',#{account},'%'))</if>
+    </where>
     ORDER BY id
-      desc
-    ]]>
-    </select>
+    desc
+  </select>
 </mapper>

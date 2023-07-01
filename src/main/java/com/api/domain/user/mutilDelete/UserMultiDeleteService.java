@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @org.springframework.stereotype.Service
-public class UserMultiDeleteService
-    implements DeleteService<UserMultiDeleteRequest, UserMultiDeleteResponse> {
+public class UserMultiDeleteService {
   private final UserRepository userRepository;
 
-  public UserMultiDeleteResponse execute(UserMultiDeleteRequest request) {
+  public UserMultiDeleteResponse execute(
+      UserMultiDeleteRequest request) {
     User user =
         request
             .toUserBuilder()
